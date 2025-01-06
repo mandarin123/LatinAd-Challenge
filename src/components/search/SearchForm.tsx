@@ -78,9 +78,7 @@ const SearchForm: React.FC = () => {
           }
         }
       );
-
       const data = await response.json();
-
       if (data.status === 'OK') {
         const formattedOptions = data.results.map((result: any) => ({
           value: result.formatted_address,
@@ -91,7 +89,6 @@ const SearchForm: React.FC = () => {
             bounds: result.geometry.viewport || result.geometry.bounds
           }
         }));
-
         setOptions(formattedOptions);
       } else {
         console.warn('Geocoding response status:', data.status);
