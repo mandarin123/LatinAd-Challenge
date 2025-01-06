@@ -25,6 +25,14 @@ BASE_URL=https://api.dev.publinet.io/displays/searchTest
 REACT_APP_GOOGLE_MAPS_ID=AIzaSyDXATZeJNq59FfgyE3CiSKuvcCjHLp2joc
 
 ```
+
+Mostrar proyecto en entorno local
+
+```
+yarn start
+
+```
+
 Librerias utilizadas
 
 ```
