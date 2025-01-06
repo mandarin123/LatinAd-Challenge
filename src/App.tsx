@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from 'react-redux';
+import { ConfigProvider } from 'antd';
+import { RouterProvider } from 'react-router-dom';
+import { store } from './store';
+import esES from 'antd/lib/locale/es_ES';
+import { router } from './routes';
+import { APIProvider } from '@vis.gl/react-google-maps';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_ID || ''}>
+      <Provider store={store}>
+        <ConfigProvider
+          locale={esES}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <RouterProvider router={router} />
+        </ConfigProvider>
+      </Provider>
+    </APIProvider>
   );
 }
 
