@@ -1,23 +1,18 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { DisplayResponse } from '../services/displays.service';
 import { useAppSelector } from './redux';
 
 export const useMapMarkers = () => {
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [currentDisplays, setCurrentDisplays] = useState<DisplayResponse[]>([]);
   const { items } = useAppSelector(state => state.cart);
 
-  const createMarkers = useCallback(async (
-    newMap: google.maps.Map, 
+  const createMarkers = useCallback((
+    map: google.maps.Map, 
     displays: DisplayResponse[],
     onMarkerClick: (display: DisplayResponse) => void
   ) => {
-    setMap(newMap);
-    setCurrentDisplays(displays);
-    
     markers.forEach(marker => marker.setMap(null));
-
+    
     const newMarkers = displays.map(display => {
       const isInCart = items.some(item => item.id === display.id);
       
@@ -32,30 +27,25 @@ export const useMapMarkers = () => {
       };
 
       const marker = new google.maps.Marker({
-        map: newMap,
+        map: map,
         position: {
           lat: Number(display.latitude),
           lng: Number(display.longitude),
         },
         title: display.name,
         icon: svgIcon,
+        clickable: true
       });
 
-      marker.addListener('click', () => onMarkerClick(display));
+      marker.addListener('click', () => {
+        onMarkerClick(display);
+      });
+
       return marker;
     });
 
     setMarkers(newMarkers);
-  }, [items]);
-
-  useEffect(() => {
-    if (map && currentDisplays.length > 0) {
-      createMarkers(map, currentDisplays, (display) => {
-        const event = new CustomEvent('markerClick', { detail: display });
-        window.dispatchEvent(event);
-      });
-    }
-  }, [items, map, currentDisplays, createMarkers]);
+  }, [items, markers]);
 
   return { markers, createMarkers };
 }; 

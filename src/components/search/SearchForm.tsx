@@ -5,7 +5,6 @@ import { useAppSelector } from '../../hooks/redux';
 import { useGooglePlaces } from '../../hooks/useGooglePlaces';
 import { LocationOption, SearchFormProps } from '../../types/search';
 import { useSearchForm } from '../../hooks/useSearchForm';
-import { isMobile } from 'react-device-detect';
 import { DateSelector } from './components/DateSelector';
 import { Dayjs } from 'dayjs';
 import { Input } from 'antd/lib';
@@ -113,23 +112,35 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchResults }) => {
 
             {showAdvancedOptions && (
               <div className="space-y-4">
-                <Form.Item name="location_types" label="Tipo de ubicación">
+                <Form.Item 
+                  name="location_type"
+                  label="Tipo de ubicación"
+                  initialValue={[]}
+                >
                   <CheckboxGroup
                     options={[
                       { label: 'Interior', value: 'indoor' },
                       { label: 'Exterior', value: 'outdoor' },
-                      { label: 'Transporte', value: 'transport' }
+                      { label: 'Punto de venta', value: 'pos' },
+                      { label: 'Buses', value: 'buses' }
                     ]}
+                    className="grid grid-cols-2 gap-2 justify-items-start w-full"
                   />
                 </Form.Item>
 
-                <Form.Item name="size_types" label="Tipo de tamaño">
+                <Form.Item 
+                  name="size_type"
+                  label="Tipo de tamaño"
+                  initialValue={[]}
+                >
                   <CheckboxGroup
                     options={[
                       { label: 'Pequeño', value: 'small' },
                       { label: 'Mediano', value: 'medium' },
-                      { label: 'Grande', value: 'large' }
+                      { label: 'Grande', value: 'big' },
+                      { label: 'Gigante', value: 'giant' }
                     ]}
+                    className="grid grid-cols-2 gap-2 justify-items-start w-full"
                   />
                 </Form.Item>
 

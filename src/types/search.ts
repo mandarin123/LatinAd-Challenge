@@ -19,4 +19,19 @@ export interface SearchFormProps {
 export interface PriceRange {
   min?: number;
   max?: number;
+}
+
+export interface SearchDisplaysParams {
+  date_from: string;
+  date_to: string;
+  lat_sw: number;
+  lng_sw: number;
+  lat_ne: number;
+  lng_ne: number;
+  page: number;
+  per_page: number;
+  location_type?: string[]; 
+  price_min?: number;
+  price_max?: number;
+  size_type?: string[];
 } 

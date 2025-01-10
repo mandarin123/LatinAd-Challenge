@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Typography, Spin } from 'antd';
 import { DisplayResponse } from '../../services/displays.service';
@@ -7,7 +7,6 @@ import { DisplayInfoWindow } from './DisplayInfoWindow';
 import { DisplayMapProps } from '../../types/map';
 import { mapContainerStyle, mapOptions } from '../../constants/map';
 
-// Definir las libraries como constante fuera del componente
 const libraries: ("places" | "marker")[] = ["places", "marker"];
 
 export const DisplayMap: React.FC<DisplayMapProps> = ({ displays, center }) => {
@@ -21,13 +20,17 @@ export const DisplayMap: React.FC<DisplayMapProps> = ({ displays, center }) => {
     libraries
   });
 
+  const handleMarkerClick = useCallback((display: DisplayResponse) => {
+    setSelectedDisplay(display);
+  }, []);
+
   useEffect(() => {
     if (mapRef.current && displays.length > 0) {
-      createMarkers(mapRef.current, displays, setSelectedDisplay);
+      createMarkers(mapRef.current, displays, handleMarkerClick);
     }
-  }, [displays, createMarkers]);
+  }, [displays, createMarkers, handleMarkerClick]);
 
-  const handleMapLoad = useCallback(async (map: google.maps.Map) => {
+  const handleMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
     if (displays.length > 0) {
       const bounds = new google.maps.LatLngBounds();
@@ -38,13 +41,9 @@ export const DisplayMap: React.FC<DisplayMapProps> = ({ displays, center }) => {
         });
       });
       map.fitBounds(bounds);
-      await createMarkers(map, displays, setSelectedDisplay);
+      createMarkers(map, displays, handleMarkerClick);
     }
-
-    map.addListener('click', () => {
-      setSelectedDisplay(null);
-    });
-  }, [displays, createMarkers]);
+  }, [displays, createMarkers, handleMarkerClick]);
 
   if (!displays?.length) {
     return (

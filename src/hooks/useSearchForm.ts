@@ -12,6 +12,7 @@ export const useSearchForm = (
 
   const handleSubmit = async (values: any) => {
     try {
+      console.log('Form Values antes de procesar:', values);
       dispatch(setLoading(true));
       
       let dateFrom, dateTo;
@@ -42,11 +43,13 @@ export const useSearchForm = (
         lng_ne: values.location.coordinates.bounds.northeast.lng,
         page: 1,
         per_page: 20,
-        location_type: values.location_types,
+        location_type: Array.isArray(values.location_type) ? values.location_type : [],
         price_min: values.price_min,
         price_max: values.price_max,
-        size_type: values.size_types
+        size_type: Array.isArray(values.size_type) ? values.size_type : []
       };
+
+      console.log('SearchParams a enviar:', searchParams);
 
       const response = await searchDisplays(searchParams);
       

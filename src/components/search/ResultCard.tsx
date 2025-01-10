@@ -59,16 +59,17 @@ const ResultCard: React.FC<ResultCardProps> = ({ display }) => {
 
   return (
     <Card className="w-full bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className={`w-full h-auto flex-shrink-0`}>
+      <div className="flex gap-4 flex-col md:flex-row md:items-start items-center">
+        <div className="w-full md:w-40 h-40 md:h-auto flex-shrink-0 overflow-hidden rounded-md">
           <Image
             src={display?.pictures[0]?.url}
             alt={display.name}
-            className={`w-auto ${isMobile ? 'h-24' : 'h-32'} object-cover rounded-md`}
+            className="w-full h-full object-contain rounded-md"
+            fallback="/placeholder-image.png"
           />
         </div>
 
-        <div className="flex-grow space-y-3">
+        <div className="flex-grow space-y-2">
           <div className="flex flex-col md:flex-row justify-between gap-2">
             <Title level={4} className="text-xl font-bold text-gray-800 m-0">
               {display.name}

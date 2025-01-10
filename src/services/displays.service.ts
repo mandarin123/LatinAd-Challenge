@@ -54,17 +54,41 @@ interface PaginatedResponse {
 
 export const searchDisplays = async (params: SearchDisplaysParams): Promise<PaginatedResponse> => {
   try {
+    const validLocationTypes = ['indoor', 'outdoor', 'pos', 'buses'];
+    const validSizeTypes = ['small', 'medium', 'big', 'giant'];
+
+    const filteredLocationTypes = params.location_type?.filter(type => 
+      validLocationTypes.includes(type)
+    );
+    const filteredSizeTypes = params.size_type?.filter(type => 
+      validSizeTypes.includes(type)
+    );
+
     const queryParams = new URLSearchParams();
     
-    Object.entries(params).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((val, index) => {
-          queryParams.append(`${key}[${index}]`, val);
-        });
-      } else if (value !== undefined) {
-        queryParams.append(key, value.toString());
-      }
-    });
+    queryParams.append('date_from', params.date_from);
+    queryParams.append('date_to', params.date_to);
+    queryParams.append('lat_sw', params.lat_sw.toString());
+    queryParams.append('lng_sw', params.lng_sw.toString());
+    queryParams.append('lat_ne', params.lat_ne.toString());
+    queryParams.append('lng_ne', params.lng_ne.toString());
+    queryParams.append('page', params.page.toString());
+    queryParams.append('per_page', params.per_page.toString());
+
+    if (filteredLocationTypes?.length) {
+      filteredLocationTypes.forEach(type => {
+        queryParams.append('location_type[]', type);
+      });
+    }
+
+    if (filteredSizeTypes?.length) {
+      filteredSizeTypes.forEach(type => {
+        queryParams.append('size_type[]', type);
+      });
+    }
+
+    if (params.price_min) queryParams.append('price_min', params.price_min.toString());
+    if (params.price_max) queryParams.append('price_max', params.price_max.toString());
 
     const response = await fetch(
       `https://api.dev.publinet.io/displays/searchTest?${queryParams}`,
@@ -75,7 +99,6 @@ export const searchDisplays = async (params: SearchDisplaysParams): Promise<Pagi
           'Cache-Control': 'no-cache',
           'authorization': `Bearer ${process.env.NEXT_PUBLIC_LATINAD_TOKEN}`,
           'Referer': 'https://latinad.com/',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
         }
       }
     );
@@ -85,10 +108,9 @@ export const searchDisplays = async (params: SearchDisplaysParams): Promise<Pagi
       throw new Error(`Error en la API de LatinAd: ${errorData.message || response.statusText}`);
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     console.error('Error al buscar displays:', error);
-    throw new Error(`Error en la búsqueda de displays: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+    throw error;
   }
-} 
+}; 

@@ -11,13 +11,17 @@ const Search: React.FC = () => {
   const [mapCenter, setMapCenter] = useState({ lat: -34.6037, lng: -58.3816 });
 
   const handleSearchResults = (searchResults: any[], center: { lat: number; lng: number }) => {
-    setResults(searchResults);
+    const resultsArray = Array.isArray(searchResults) 
+      ? searchResults 
+      : Object.values(searchResults).filter(item => item !== null);
+    
+    setResults(resultsArray);
     setMapCenter(center);
   };
-
+  
   return (
     <AntdApp>
-      <div className="w-full min-h-screen px-4">
+      <div className="w-full min-h-screen px-4 mb-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="col-span-1">
             <SearchForm onSearchResults={handleSearchResults} />
@@ -43,7 +47,7 @@ const Search: React.FC = () => {
                   center={mapCenter}
                 />
                 <div className="space-y-6 mt-5">
-                  {results.map(display => (
+                  {results.length > 0 && results.map(display => (
                     <ResultCard
                       key={display.id}
                       display={display}
