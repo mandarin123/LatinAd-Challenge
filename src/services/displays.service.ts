@@ -11,6 +11,7 @@ interface SearchDisplaysParams {
   price_min?: number;
   price_max?: number;
   size_type?: string[];
+  search?: string;
 }
 
 export interface DisplayResponse {
@@ -66,25 +67,28 @@ export const searchDisplays = async (params: SearchDisplaysParams): Promise<Pagi
     });
 
     const response = await fetch(
-      `${process.env.BASE_URL}?${queryParams}`,
+      `https://api.dev.publinet.io/displays/searchTest?${queryParams}`,
       {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Referer': 'https://latinad.com/'
+          'Cache-Control': 'no-cache',
+          'authorization': `Bearer ${process.env.NEXT_PUBLIC_LATINAD_TOKEN}`,
+          'Referer': 'https://latinad.com/',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
         }
       }
     );
 
     if (!response.ok) {
-      throw new Error('Error en la llamada a la API');
+      const errorData = await response.json();
+      throw new Error(`Error en la API de LatinAd: ${errorData.message || response.statusText}`);
     }
 
     const data = await response.json();
-    console.log('Respuesta de la API:', data);
     return data;
   } catch (error) {
     console.error('Error al buscar displays:', error);
-    throw error;
+    throw new Error(`Error en la búsqueda de displays: ${error instanceof Error ? error.message : 'Error desconocido'}`);
   }
 } 

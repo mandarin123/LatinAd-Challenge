@@ -40,8 +40,7 @@ const searchSlice = createSlice({
       state.location = null;
     },
     setDates: (state, action: PayloadAction<{ dateFrom: string; dateTo: string }>) => {
-      state.dates.dateFrom = action.payload.dateFrom;
-      state.dates.dateTo = action.payload.dateTo;
+      state.dates = action.payload;
     },
     setLocation: (state, action: PayloadAction<string>) => {
       state.location = action.payload;

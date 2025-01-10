@@ -1,21 +1,16 @@
 import axios from 'axios';
 
-// Configuración base de axios con la URL correcta
 const api = axios.create({
     baseURL: 'https://api.dev.publinet.io/displays',
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Referer': 'https://latinad.com/',
         'Cache-Control': 'no-cache',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
     }
 });
 
-// Método GET genérico con manejo de arrays en parámetros
 const methodGet = async (url, params = {}) => {
     try {
-        // Transformamos los parámetros array al formato correcto
         const transformedParams = new URLSearchParams();
         
         Object.entries(params).forEach(([key, value]) => {
@@ -50,7 +45,6 @@ const handleApiError = (error) => {
     };
 };
 
-// Función principal de búsqueda que coincide con la documentación
 export const searchDisplays = async ({
     date_from,
     date_to,

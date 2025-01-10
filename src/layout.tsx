@@ -1,126 +1,121 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Layout as AntLayout, Menu, theme, Button, Badge } from 'antd';
+import React from 'react';
+import { Layout as AntLayout, Menu, Badge, Image, Dropdown } from 'antd';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { 
-  MenuFoldOutlined, 
-  MenuUnfoldOutlined,
   HomeOutlined,
-  ShoppingCartOutlined
+  SearchOutlined,
+  ShoppingCartOutlined,
+  MoreOutlined 
 } from '@ant-design/icons';
-import { useAppSelector, useAppDispatch } from './hooks/redux';
-import { clearSearchResults } from './store/slices/searchSlice';
+import { useAppSelector } from './hooks/redux';
+import { Footer } from 'antd/lib/layout/layout';
+import { Link } from 'react-router-dom';
 
-const { Header, Sider, Content } = AntLayout;
+const { Header, Content } = AntLayout;
 
 export const Layout: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useAppDispatch();
   const { totalItems } = useAppSelector(state => state.cart);
-  
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
 
-  const handleResize = useCallback(() => {
-    setIsMobile(window.innerWidth < 768);
-    if (window.innerWidth < 768) {
-      setCollapsed(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [handleResize]);
-
-  useEffect(() => {
-    dispatch(clearSearchResults());
-  }, [location.pathname, dispatch]);
+  const handleClick = (e: any) => {
+    navigate(e.key);
+  };
 
   const menuItems = [
     {
       key: '/',
       icon: <HomeOutlined />,
-      label: 'Inicio',
+      label: 'Inicio'
+    },
+    {
+      key: '/search',
+      icon: <SearchOutlined />,
+      label: 'Buscar'
     },
     {
       key: '/cart',
       icon: <ShoppingCartOutlined />,
       label: (
-        <div className="flex justify-between items-center w-full pr-2">
+        <>
           Carrito
           {totalItems > 0 && (
-            <Badge 
-              count={totalItems} 
-              size="default"
-              style={{ 
-                marginLeft: 'auto',
-              }}
-            />
+            <Badge count={totalItems} size="small" style={{ marginLeft: 8 }} />
           )}
-        </div>
-      ),
-    },
+        </>
+      )
+    }
   ];
 
+  const mobileMenu = (
+    <Menu onClick={handleClick} selectedKeys={[location.pathname]}>
+      {menuItems.map(item => (
+        <Menu.Item key={item.key} icon={item.icon}>
+          {item.label}
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+
   return (
-    <AntLayout className="min-h-screen m-0 p-0">
-      <Sider 
-        theme="light"
-        trigger={null} 
-        collapsible
-        collapsedWidth='50'
-        collapsed={collapsed}
-        breakpoint="lg"
-        className={`
-          fixed h-full z-50 transition-all duration-300 
-          lg:relative left-0 top-0 bottom-0
-          max-lg:absolute
-          max-md:transform
-          max-md:translate-x-0
-          max-md:shadow-lg
-        `}
+    <AntLayout className="min-h-screen" style={{ background: 'linear-gradient(0deg, rgb(57, 150, 243), rgb(66, 165, 245))' }}>
+      <Header
+        style={{ 
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          padding: 0,
+          background: '#fff',
+          borderBottom: '1px solid #f0f0f0',
+          margin: '10px',
+          borderRadius: '10px',
+        }}
       >
-        <Header className="p-0 bg-transparent sticky top-0 z-40 flex items-center flex-col">
-          {!isMobile && (
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              className="w-16 h-16 text-lg flex items-center justify-center"
-            />
-          )}
-          <Menu
-            theme="light"
-            mode="inline"
+        <div className="flex items-center justify-between">
+          <div className="px-4">
+            <Link to="/">
+              <Image 
+                src="https://latinad.com/static/media/latinad.c0f35902.svg" 
+                alt="logo" 
+                width={80} 
+                preview={false}
+              />
+            </Link>
+          </div>
+          
+          <Menu 
+            onClick={handleClick}
             selectedKeys={[location.pathname]}
-            items={menuItems}
-            onClick={({ key }) => navigate(key)}
-            className="border-r-0 h-full"
-          />
-        </Header>
-      </Sider>
+            mode="horizontal"
+            style={{ width: '100%', border: 'none', borderRadius: '10px' }}
+            className="hidden md:flex"
+          >
+            {menuItems.map(item => (
+              <Menu.Item key={item.key} icon={item.icon}>
+                {item.label}
+              </Menu.Item>
+            ))}
+          </Menu>
+
+          <div className="md:hidden px-2 py-1">
+            <Dropdown 
+              overlay={mobileMenu} 
+              trigger={['click']}
+              placement="bottomRight"
+            >
+              <MoreOutlined style={{ fontSize: '24px' }} />
+            </Dropdown>
+          </div>
+        </div>
+      </Header>
       
-      <AntLayout className={`transition-all duration-300 ${
-        collapsed ? 'lg:ml-[80px]' : 'lg:ml-[200px]'
-      }`}>
-        
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-            minHeight: 280,
-          }}
-        >
+      <Content>
           <Outlet />
-        </Content>
-      </AntLayout>
+      </Content>
+
+      <Footer style={{ textAlign: 'center' }}>
+        LatinAd Challenge {new Date().getFullYear()} by Martin Abel ©
+      </Footer>
     </AntLayout>
   );
 };

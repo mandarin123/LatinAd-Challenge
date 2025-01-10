@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import SearchForm from './components/search/SearchForm';
-import DisplayMap from './components/search/DisplayMap';
 import {Layout} from './layout';
 import CartPage from './pages/Cart';
+import Search from './pages/Search';
+import Home from './pages/Home';
 
 export const router = createBrowserRouter([
   {
@@ -11,15 +11,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <SearchForm />,
-      },
-      {
-        path: '/map',
-        element: <DisplayMap displays={[]} center={{ lat: 0, lng: 0 }} />,
+        element: <Home />,
       },
       {
         path: '/cart',
         element: <CartPage />,
+      },
+      {
+        path: '/search',
+        element: <Search />,
       },
       {
         path: '*',
