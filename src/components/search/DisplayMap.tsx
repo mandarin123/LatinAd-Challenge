@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Typography, Spin } from 'antd';
 import { DisplayResponse } from '../../services/displays.service';
@@ -6,6 +6,9 @@ import { useMapMarkers } from '../../hooks/useMapMarkers';
 import { DisplayInfoWindow } from './DisplayInfoWindow';
 import { DisplayMapProps } from '../../types/map';
 import { mapContainerStyle, mapOptions } from '../../constants/map';
+
+// Definir las libraries como constante fuera del componente
+const libraries: ("places" | "marker")[] = ["places", "marker"];
 
 export const DisplayMap: React.FC<DisplayMapProps> = ({ displays, center }) => {
   const [selectedDisplay, setSelectedDisplay] = useState<DisplayResponse | null>(null);
@@ -15,7 +18,7 @@ export const DisplayMap: React.FC<DisplayMapProps> = ({ displays, center }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_ID || '',
-    libraries: ['marker']
+    libraries
   });
 
   useEffect(() => {

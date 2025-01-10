@@ -25,7 +25,16 @@ const Search: React.FC = () => {
           <div className="col-span-1 md:col-span-3">
             {loading ? (
               <Card className="w-full h-[400px] flex items-center justify-center">
-                <Spin size="large" tip="Cargando mapa..." />
+                <div style={{ position: 'relative', minHeight: '200px' }}>
+                  <Spin 
+                    style={{ 
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                  />
+                </div>
               </Card>
             ) : (
               <>

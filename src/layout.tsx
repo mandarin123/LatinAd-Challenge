@@ -47,15 +47,12 @@ export const Layout: React.FC = () => {
     }
   ];
 
-  const mobileMenu = (
-    <Menu onClick={handleClick} selectedKeys={[location.pathname]}>
-      {menuItems.map(item => (
-        <Menu.Item key={item.key} icon={item.icon}>
-          {item.label}
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
+  const mobileMenu = menuItems.map(item => ({
+    key: item.key,
+    icon: item.icon,
+    label: item.label,
+    onClick: () => navigate(item.key)
+  }));
 
   return (
     <AntLayout className="min-h-screen" style={{ background: 'linear-gradient(0deg, rgb(57, 150, 243), rgb(66, 165, 245))' }}>
@@ -89,17 +86,12 @@ export const Layout: React.FC = () => {
             mode="horizontal"
             style={{ width: '100%', border: 'none', borderRadius: '10px' }}
             className="hidden md:flex"
-          >
-            {menuItems.map(item => (
-              <Menu.Item key={item.key} icon={item.icon}>
-                {item.label}
-              </Menu.Item>
-            ))}
-          </Menu>
+            items={menuItems}
+          />
 
           <div className="md:hidden px-2 py-1">
             <Dropdown 
-              overlay={mobileMenu} 
+              menu={{ items: mobileMenu }}
               trigger={['click']}
               placement="bottomRight"
             >

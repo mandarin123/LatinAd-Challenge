@@ -46,7 +46,6 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchResults }) => {
               rules={[{ required: true, message: 'Por favor seleccione las fechas' }]}
             >
               <DateSelector
-                isMobile={isMobile}
                 startDate={startDate}
                 endDate={endDate}
                 setStartDate={setStartDate}

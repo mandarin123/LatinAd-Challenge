@@ -59,10 +59,14 @@ export const useGooglePlaces = () => {
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && !autocompleteService) {
-      setAutocompleteService(new google.maps.places.AutocompleteService());
-      const mapDiv = document.createElement('div');
-      setPlacesService(new google.maps.places.PlacesService(mapDiv));
+    if (window.google && !autocompleteService) {
+      try {
+        setAutocompleteService(new window.google.maps.places.AutocompleteService());
+        const mapDiv = document.createElement('div');
+        setPlacesService(new window.google.maps.places.PlacesService(mapDiv));
+      } catch (error) {
+        console.error('Error initializing Google Places services:', error);
+      }
     }
   }, [autocompleteService]);
 

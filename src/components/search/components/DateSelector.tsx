@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { DatePicker, Form } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { DateSelectorProps } from '../../../types/date';
+import type { Dayjs } from 'dayjs';
 
 export const DateSelector: React.FC<DateSelectorProps> = ({
   startDate,
@@ -13,18 +14,39 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
   const screens = useBreakpoint();
   const isDesktop = screens.lg;
 
+  const disabledDate = useCallback((current: Dayjs) => {
+    return current && current.isBefore(new Date(), 'day');
+  }, []);
+
+  const handleRangeChange = useCallback((dates: [Dayjs | null, Dayjs | null] | null) => {
+    const [start, end] = dates || [null, null];
+    setStartDate(start);
+    setEndDate(end);
+    form.setFieldsValue({ dates: { start, end } });
+  }, [form, setStartDate, setEndDate]);
+
+  const handleStartDateChange = useCallback((date: Dayjs | null) => {
+    setStartDate(date);
+    form.setFieldsValue({
+      dates: { start: date, end: form.getFieldValue(['dates', 'end']) }
+    });
+  }, [form, setStartDate]);
+
+  const handleEndDateChange = useCallback((date: Dayjs | null) => {
+    setEndDate(date);
+    form.setFieldsValue({
+      dates: { start: form.getFieldValue(['dates', 'start']), end: date }
+    });
+  }, [form, setEndDate]);
+
   if (isDesktop) {
     return (
       <DatePicker.RangePicker
         className="w-full rounded-lg"
         value={[startDate, endDate]}
         format="DD/MM/YYYY"
-        disabledDate={(current) => current && current.isBefore(new Date(), 'day')}
-        onChange={(dates) => {
-          setStartDate(dates?.[0] || null);
-          setEndDate(dates?.[1] || null);
-          form.setFieldValue('dates', dates);
-        }}
+        disabledDate={disabledDate}
+        onChange={handleRangeChange}
       />
     );
   }
@@ -38,17 +60,8 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
       >
         <DatePicker 
           format="DD/MM/YYYY"
-          disabledDate={(current) => current && current.isBefore(new Date(), 'day')}
-          onChange={(date) => {
-            setStartDate(date);
-            const currentEndDate = form.getFieldValue(['dates', 'end']);
-            form.setFieldsValue({
-              dates: {
-                start: date,
-                end: currentEndDate
-              }
-            });
-          }} 
+          disabledDate={disabledDate}
+          onChange={handleStartDateChange}
           className="w-full rounded-lg"
         />
       </Form.Item>
@@ -61,21 +74,9 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
           format="DD/MM/YYYY"
           disabledDate={(current) => {
             const startDate = form.getFieldValue(['dates', 'start']);
-            return (
-              (current && current.isBefore(new Date(), 'day')) ||
-              (startDate && current && current.isBefore(startDate, 'day'))
-            );
+            return disabledDate(current) || (startDate && current && current.isBefore(startDate, 'day'));
           }}
-          onChange={(date) => {
-            setEndDate(date);
-            const currentStartDate = form.getFieldValue(['dates', 'start']);
-            form.setFieldsValue({
-              dates: {
-                start: currentStartDate,
-                end: date
-              }
-            });
-          }} 
+          onChange={handleEndDateChange}
           className="w-full rounded-lg"
         />
       </Form.Item>

@@ -9,9 +9,14 @@ import { router } from './routes';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import theme from './theme/themeConfig';
 
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_ID || '';
+
 function App() {
   return (
-    <APIProvider apiKey={process.env.REACT_APP_GOOGLE_MAPS_ID || ''}>
+    <APIProvider 
+      apiKey={apiKey} 
+      libraries={["places", "marker"]}
+    >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ConfigProvider
