@@ -7,6 +7,7 @@ import { addToCart } from '../../store/slices/cartSlice';
 import { differenceInDays } from 'date-fns';
 import moment from 'moment';
 import { SIZE_OPTIONS, LOCATION_TYPE_OPTIONS } from '../../constants/search';
+import { isMobile } from 'react-device-detect';
 
 const { Text, Title } = Typography;
 
@@ -59,12 +60,11 @@ const ResultCard: React.FC<ResultCardProps> = ({ display }) => {
   return (
     <Card className="w-full bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200">
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="w-full md:w-48 h-48 md:h-32 flex-shrink-0">
+        <div className={`w-full h-auto flex-shrink-0`}>
           <Image
             src={display?.pictures[0]?.url}
             alt={display.name}
-            className="w-full h-full object-cover rounded-md"
-            fallback="/placeholder-image.jpg"
+            className={`w-auto ${isMobile ? 'h-24' : 'h-32'} object-cover rounded-md`}
           />
         </div>
 
