@@ -34,7 +34,7 @@ const Home = () => {
                 Latin
               </h1>
               <h1 className="text-white text-6xl font-bold mb-2">
-                AD
+                Ad
               </h1>
             </div>
 
