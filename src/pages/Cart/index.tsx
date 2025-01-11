@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Typography, Button, Empty, Image, message } from 'antd';
 import { DeleteOutlined, FileTextOutlined } from '@ant-design/icons';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
@@ -69,8 +68,6 @@ const CartPage: React.FC = () => {
       </div>
     );
   }
-
-  console.log(items);
   
   return (
     <div className="container mx-auto px-4 py-4 md:py-8 max-w-[1200px]">

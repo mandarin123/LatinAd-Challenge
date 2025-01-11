@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <>
       <div
-        className="relative h-[60vh] w-full"
+        className="relative h-[70vh] sm:h-[60vh] w-full"
         style={{
           background: 'linear-gradient(0deg, rgb(57, 150, 243), rgb(66, 165, 245))',
         }}
@@ -27,7 +27,7 @@ const Home = () => {
           }}
         />
 
-        <div className="relative z-10 container lg:mx-20 xl:mx-20 px-4 pt-20">
+        <div className="relative z-10 container lg:mx-20 xl:mx-20 px-4 pt-12 sm:pt-20">
           <div className="max-w-xl mx-auto md:mx-0">
             <div className='flex flex-row justify-center md:justify-start'>
               <h1 className="text-white text-6xl font-thin mb-2">
@@ -42,11 +42,11 @@ const Home = () => {
               Mejora el alcance de tu marca
             </h1>
 
-            <p className="text-white text-xl mb-8 font-light max-w-md text-center md:text-left">
+            <p className="text-white text-xl mb-6 sm:mb-8 font-light max-w-md text-center md:text-left">
               Crea campañas fuera de casa en minutos y alcanza a miles de personas
             </p>
 
-            <div className="flex justify-center md:justify-start">
+            <div className="flex justify-center md:justify-start pb-4 sm:pb-0">
               <Button
                 type="primary"
                 size="large"

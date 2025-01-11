@@ -12,28 +12,22 @@ export const useSearchForm = (
 
   const handleSubmit = async (values: any) => {
     try {
-      console.log('Form Values antes de procesar:', values);
       dispatch(setLoading(true));
-      
       let dateFrom, dateTo;
-      
       if (Array.isArray(values.dates)) {
         [dateFrom, dateTo] = values.dates;
       } else {
         dateFrom = values.dates.start;
         dateTo = values.dates.end;
       }
-      
       dispatch(setDates({
         dateFrom: dateFrom.format('YYYY-MM-DD'),
         dateTo: dateTo.format('YYYY-MM-DD')
       }));
-      
       if (!values.location?.coordinates?.bounds) {
         message.error('Por favor seleccione una ubicación válida del listado');
         return;
       }
-
       const searchParams = {
         date_from: dateFrom.format('YYYY-MM-DD'),
         date_to: dateTo.format('YYYY-MM-DD'),
@@ -48,11 +42,7 @@ export const useSearchForm = (
         price_max: values.price_max,
         size_type: Array.isArray(values.size_type) ? values.size_type : []
       };
-
-      console.log('SearchParams a enviar:', searchParams);
-
       const response = await searchDisplays(searchParams);
-      
       onSearchResults(
         response.data,
         {

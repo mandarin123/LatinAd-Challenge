@@ -23,6 +23,7 @@ const ResultCard: React.FC<ResultCardProps> = ({ display }) => {
   const isAdded = items.some(item => item.id === display.id);
 
   const totalDays = useMemo(() => {
+    
     if (!dates.dateFrom || !dates.dateTo) {
       console.log('No hay fechas seleccionadas');
       return 0;
