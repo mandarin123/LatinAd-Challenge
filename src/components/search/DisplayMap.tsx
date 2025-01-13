@@ -16,7 +16,7 @@ export const DisplayMap: React.FC<DisplayMapProps> = ({ displays, center }) => {
 
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_ID || '',
+    googleMapsApiKey: 'AIzaSyDXATZeJNq59FfgyE3CiSKuvcCjHLp2joc',
     libraries
   });
 
@@ -28,7 +28,7 @@ export const DisplayMap: React.FC<DisplayMapProps> = ({ displays, center }) => {
     if (mapRef.current && displays.length > 0) {
       createMarkers(mapRef.current, displays, handleMarkerClick);
     }
-  }, [displays, createMarkers, handleMarkerClick]);
+  }, [selectedDisplay]);
 
   const handleMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;

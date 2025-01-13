@@ -9,7 +9,7 @@ import { router } from './routes';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import theme from './theme/themeConfig';
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_ID || '';
+const apiKey = 'AIzaSyDXATZeJNq59FfgyE3CiSKuvcCjHLp2joc';
 
 function App() {
   return (

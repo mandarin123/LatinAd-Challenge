@@ -63,6 +63,7 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
           disabledDate={disabledDate}
           onChange={handleStartDateChange}
           className="w-full rounded-lg"
+          placeholder="Fecha inicial"
         />
       </Form.Item>
       <Form.Item
@@ -72,12 +73,18 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
       >
         <DatePicker 
           format="DD/MM/YYYY"
+          disabled={!startDate}
           disabledDate={(current) => {
             const startDate = form.getFieldValue(['dates', 'start']);
-            return disabledDate(current) || (startDate && current && current.isBefore(startDate, 'day'));
+            if (!startDate) return true;
+            return (
+              disabledDate(current) || 
+              (current && current.isBefore(startDate, 'day'))
+            );
           }}
           onChange={handleEndDateChange}
           className="w-full rounded-lg"
+          placeholder="Fecha final"
         />
       </Form.Item>
     </div>

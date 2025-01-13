@@ -150,8 +150,12 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchResults }) => {
                       <InputNumber
                         placeholder="Mín"
                         className="w-full"
+                        min={0}
                         formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={value => value!.replace(/\$\s?|(,*)/g, '')}
+                        parser={(value: string | undefined) => {
+                          const parsed = value ? Number(value.replace(/\$\s?|(,*)/g, '')) : 0;
+                          return parsed || 0;
+                        }}
                       />
                     </Form.Item>
                     <span>-</span>
@@ -159,8 +163,12 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchResults }) => {
                       <InputNumber
                         placeholder="Máx"
                         className="w-full"
+                        min={0}
                         formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={value => value!.replace(/\$\s?|(,*)/g, '')}
+                        parser={(value: string | undefined) => {
+                          const parsed = value ? Number(value.replace(/\$\s?|(,*)/g, '')) : 0;
+                          return parsed || 0;
+                        }}
                       />
                     </Form.Item>
                   </Space>

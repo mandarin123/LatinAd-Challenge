@@ -9,7 +9,7 @@ export const mapOptions = {
     zoomControl: true,
     streetViewControl: true,
     fullscreenControl: true,
-    mapId: process.env.REACT_APP_GOOGLE_MAPS_ID || 'DEMO_MAP_ID',
+    mapId: 'AIzaSyDXATZeJNq59FfgyE3CiSKuvcCjHLp2joc',
     styles: [
       {
         featureType: "all",
